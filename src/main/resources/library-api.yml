@@ -1,0 +1,102 @@
+---
+openapi: 3.0.0
+info:
+  title: Mixed services
+  version: 0.0.1
+  description: The Mixed services
+tags:
+  - name: "Addition"
+  - name: "Library"
+paths:
+  /add/{firstNumber}:
+    get:
+      summary: This is summary
+      tags:
+        - "Addition"
+      description: This is the description
+      operationId: addTwoNumbers
+      parameters:
+        - $ref: '#/components/parameters/firstNumber'
+        - $ref: '#/components/parameters/secondNumber'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sum'
+
+        400:
+          description: The required parameter is missing or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid parameters
+
+        404:
+          description: "Route not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Route not found
+  /library/books:
+    get:
+      summary: Get all books
+      tags:
+        - "Library"
+      description: Get all books
+      operationId: getAllBooks
+      responses:
+        200:
+          description: This means its ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+components:
+  parameters:
+    firstNumber:
+      name: firstNumber
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+    secondNumber:
+      in: query
+      name: secondNumber
+      description: "The second number to be added"
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Sum:
+      description: This sum model
+      type: object
+      properties:
+        result:
+          description: Integer result
+          type: integer
+        stringResult:
+          description: String result
+          type: string
+    Book:
+      description: This is a book model
+      type: object
+      properties:
+        name:
+          description: Book title
+          type: string
+        author:
+          description: Author of  book
+          type: string
